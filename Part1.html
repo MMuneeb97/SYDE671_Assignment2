@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Part 1 - My Website</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <nav>
+            <a href="index.html" class="logo">Muhammad Muneeb</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="Part1.html" class="active">Part 1</a></li>
+                <li><a href="Part2.html">Part 2</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="card">
+            <h1 style="text-align: center;">Part 1 Understanding Zoom</h1>
+            
+            <!-- SECTION 1 -->
+            <div class="section-block">
+                <h2 class="section-title">Section 1: Selfie: The wrong way Vs. The right way</h2>
+                <p class="section-desc">I'm clearly really bad at taking selfies so instead I had my wife take
+                photos of me. First standing close without zoom and then stepping away and zoming in while maintaining 
+                the size of my face in the photos. </p>
+                
+                <div class="image-grid">
+                    <div class="image-card">
+                        <img src="images/without_zoom.jpeg" alt="Without Zoom>
+                        <p class="image-caption">Without zoom</p>
+                    </div>
+                    <div class="image-card">
+                        <img src="images/with_zoom.jpeg" alt="With Zoom">
+                        <p class="image-caption">With zoom</p>
+                    </div>
+                </div>
+            </div>
+            <div class="section-block">
+                <h2 class="section-title">Section 2: Architectural Perspective Suppression</h2>
+                <p class="section-desc">Next I took some photos of our tree in the front yard. It's a very old tree and is always the first to change color in fall on the entire street.</p>
+                
+                <div class="image-grid">
+                    <div class="image-card">
+                        <img src="images/without_zoom_urban.jpeg" alt="Without zoom">
+                        <p class="image-caption">Our tree close-up, without zoom</p>
+                    </div>
+                    <div class="image-card">
+                        <img src="images/with_zoom_urban.jpeg" alt="Section 2 Image 2">
+                        <p class="image-caption">Our tree from a distance, with zoom</p>
+                    </div>
+                </div>
+            </div>
+            <div class="section-block">
+                <h2 class="section-title">Section 3: Dolly Zoom</h2>
+                <p class="section-desc">For dolly zoom demonstration, I placed a vase and took several photos of it each time moving away and zooming in on it.</p>
+                
+                <div class="video-container">
+                    <video controls autoplay loop muted playsinline preload="metadata">
+                        <source src="images/dolly_zoom.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <p class="dolly_zoom.mp4">Dolly zoom GIF</p>
+                </div>
+            </div>
+
+        </div>
+    </main>
+</body>
+</html>
