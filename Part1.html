@@ -84,16 +84,17 @@ Convolution is a way to scan every pixel in an image and extract useful informat
                         plt.imshow(result, cmap='gray')
                         plt.axis('off')
                         
-                        plt.show
+                        plt.show()
                     </code></pre>
                 </div>
                 <p class="section-desc">After loading in the required libraries, NumPy to use array functions and matplotlib to plot our images we load in the image and convert it from color to grayscale. Once the image is loaded, we define our kernel; a 9x9 matrix of ones. This is a box filter that will reduce the sharpness and make it smooth. Simply put it makes the image blurred. Next we define our convolution function, we start by padding the image all around with zeros to make sure that the edge features don’t get deleted during the convolution operations as the kernel moves across the image.
-Next, we define our four nested for loops. The outer loops iterate over the image size (height and width) and the inner loops iterate over the kernel size and perform the dot product over a size of the image equal to the kernel size across the entire image. The results of the convolution are stored in an array and returned at the function call.
+                Next, we define our four nested for loops. The outer loops iterate over the image size (height and width) and the inner loops iterate over the kernel size and perform the dot product over a size of the image equal to the kernel size across the entire image. The results of the convolution are stored in an array and returned at the function call.
+                Below are the results of the convolution performed with the above code.   
  </p>
                 
                 <div class="image-grid">
                     <div class="image-card">
-                        <img src="blog_pics/img1.png" alt="Original Greyscale">
+                        <img src="blog _pics\img1.png" alt="img1">
                     </div>
                 </div>
 
