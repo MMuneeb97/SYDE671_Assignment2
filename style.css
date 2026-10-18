@@ -245,3 +245,19 @@ footer {
     background-color: #000;        /* Black letterbox background */
     display: block;
 }
+
+.code-block-container {
+    background-color: #0f172a; /* Dark background matching your header/footer */
+    color: #e2e8f0;          /* Light text */
+    padding: 1.2rem;
+    border-radius: 6px;
+    margin: 1.5rem 0;
+    text-align: left;        /* Keep code left-aligned even inside centered cards */
+    overflow-x: auto;        /* Adds a horizontal scrollbar if code is long */
+}
+
+.code-block-container pre {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
