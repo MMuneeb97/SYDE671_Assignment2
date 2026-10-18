@@ -95,7 +95,7 @@ Convolution is a way to scan every pixel in an image and extract useful informat
                 
                 <div class="image-grid">
                     <div class="image-card">
-                        <img src="blog _pics\img1.png" alt="img1">
+                        <img src="blog _pics\img2.png" alt="img1">
                     </div>
                 </div>
                 <p class="section-desc">As expected, the processed image has lost its sharpness, especially around the edges and any thin fine features such the rim of the glasses, the letters on the shirt and hair. Overall, the details and features of the original image are still discernable in the processed image.
@@ -103,7 +103,6 @@ Convolution is a way to scan every pixel in an image and extract useful informat
                 Next, we will slightly optimize the code to use less processing time and process larger images more efficiently. While using four for loops was an effective way to explain the underlying principle it increases the number of calculations and slows down the processing especially when dealing with larger images or more involved filters. The following code uses only two for loops instead of four to achieve the same effect as before.
                 </p>    
 
-                <p style="text-align: left; margin-top: 1.5rem; margin-bottom: 1rem;"><strong>2. Two For-Loops Implementation</strong> By extracting a region of interest (ROI) matching the kernel size, we reduce the implementation to two for-loops, significantly speeding up processing time[cite: 1]. Streamlining further with SciPy's built-in <code>convolve2d</code> utilizes optimized vectorized operations and Fourier transforms for maximum efficiency on large images[cite: 1].</p>
                 <div class="code-block-container">
                     <pre><code>
                         #part 1.1: Convolution with 2 for loops
@@ -152,7 +151,10 @@ Convolution is a way to scan every pixel in an image and extract useful informat
                         plt.show()
                     </code></pre>
                 </div>
-                <p class="section-desc">This time we use two for loops instead of four. Instead of iterating over the entire image, this time around we pick a region of interest matching the size of our kernel, perform the convolution calculation and then slide our region of interest one column to the right and repeat for the entire image. Below is the result of this code and you can see the results are identical however the processing time is significantly reduced and larger images can be processed more effeciently with this code.   
+                <p class="section-desc">This time we use two for loops instead of four. Instead of iterating over the entire image, 
+                    this time around we pick a region of interest matching the size of our kernel, perform the convolution calculation and 
+                    then slide our region of interest one column to the right and repeat for the entire image. Below is the result of this code and 
+                    you can see the results are identical however the processing time is significantly reduced and larger images can be processed more effeciently with this code.   
                 </p>
                 
                 <div class="image-grid">
@@ -162,6 +164,23 @@ Convolution is a way to scan every pixel in an image and extract useful informat
                 </div>
                 
             </div>
+            <p class="section-desc"> </p>    
+
+                <div class="code-block-container">
+                    <pre><code>
+                                           </code></pre>
+                </div>
+                <p class="section-desc">   
+                </p>
+                
+                <div class="image-grid">
+                    <div class="image-card">
+                        <img src="blog _pics\img4.png" alt="img4">
+                    </div>
+                </div>
+                
+            </div>
+
 
             <!-- SECTION 2: EDGE DETECTION WITH DIFFERENCE OPERATORS -->
             <div class="section-block">
