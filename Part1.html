@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Part 1 - My Website</title>
+    <title>SYDE 671 Assignment 2 - Blog</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -14,62 +14,81 @@
             <ul class="nav-links">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="Part1.html" class="active">Blog</a></li>
-                
             </ul>
         </nav>
     </header>
 
     <main>
         <div class="card">
-            <h1 style="text-align: center;">Part 1 Understanding Zoom</h1>
+            <h1 style="text-align: center;">SYDE 671 Assignment 2 Review</h1>
+            <p>In this blog, we review key concepts from Assignment 2, starting with the fundamentals of convolution, exploring various implementation methods, examining edge detection and Derivative of Gaussian (DoG) filters, and concluding with image sharpening techniques[cite: 1].</p>
             
-            <!-- SECTION 1 -->
+            <!-- SECTION 1: INTRODUCTION TO CONVOLUTION -->
             <div class="section-block">
-                <h2 class="section-title">Section 1: Selfie: The wrong way Vs. The right way</h2>
-                <p class="section-desc">I'm clearly really bad at taking selfies so instead I had my wife take
-                photos of me. First standing close without zoom and then stepping away and zoming in while maintaining 
-                the size of my face in the photos. </p>
+                <h2 class="section-title">Section 1: Convolution & Implementation Methods</h2>
+                <p class="section-desc">Convolution scans every pixel in an image using a kernel (filter) to process pixels in the context of their neighbors, extracting useful features or transforming features to be more meaningful[cite: 1].</p>
+                
+                <p style="text-align: left; margin-bottom: 1rem;"><strong>1. Four For-Loops Implementation:</strong> The most fundamental way to implement convolution is using array functions and four nested for-loops. While computationally expensive and slow for large images, it clearly demonstrates the underlying math and how edge padding prevents border feature loss[cite: 1].</p>
                 
                 <div class="image-grid">
                     <div class="image-card">
-                        <img src="images/without_zoom.jpeg" alt="Without Zoom>
-                        <p class="image-caption">Without zoom</p>
+                        <img src="images/original_greyscale.png" alt="Original Greyscale">
+                        <p class="image-caption">Original Greyscale Image</p>
                     </div>
                     <div class="image-card">
-                        <img src="images/with_zoom.jpeg" alt="With Zoom">
-                        <p class="image-caption">With zoom</p>
+                        <img src="images/filtered_blurred.png" alt="Filtered Blurred">
+                        <p class="image-caption">Filtered / Blurred (9x9 Box Filter)</p>
                     </div>
                 </div>
+
+                <p style="text-align: left; margin-top: 1.5rem; margin-bottom: 1rem;"><strong>2. Optimized Two For-Loops & SciPy:</strong> By extracting a region of interest (ROI) matching the kernel size, we reduce the implementation to two for-loops, significantly speeding up processing time[cite: 1]. Streamlining further with SciPy's built-in <code>convolve2d</code> utilizes optimized vectorized operations and Fourier transforms for maximum efficiency on large images[cite: 1].</p>
             </div>
+
+            <!-- SECTION 2: EDGE DETECTION WITH DIFFERENCE OPERATORS -->
             <div class="section-block">
-                <h2 class="section-title">Section 2: Architectural Perspective Suppression</h2>
-                <p class="section-desc">Next I took some photos of our tree in the front yard. It's a very old tree and is always the first to change color in fall on the entire street.</p>
+                <h2 class="section-title">Section 2: Edge Detection Using Difference Operators</h2>
+                <p class="section-desc">Difference operators ($dx$ and $dy$) are uni-directional vectors used to extract gradient magnitudes horizontally and vertically[cite: 1].</p>
+                <p style="text-align: left; margin-bottom: 1rem;">The partial derivative $dy$ highlights vertical edges by subtracting the pixel above from the pixel below, while $dx$ captures horizontal edges[cite: 1]. The combined gradient magnitude is calculated as $\text{grad\_mag} = \sqrt{\text{grad\_x}^2 + \text{grad\_y}^2}$[cite: 1].</p>
+                
+                <p style="text-align: left; margin-bottom: 1rem;"><strong>Threshold Sweeps:</strong> To suppress background noise (such as grass or minor textures), binarization loops apply intensity cutoffs. Pixels above the threshold are set to 255, while those below are set to 0. Finding the optimal threshold requires balancing feature clarity against background loss[cite: 1].</p>
                 
                 <div class="image-grid">
                     <div class="image-card">
-                        <img src="images/without_zoom_urban.jpeg" alt="Without zoom">
-                        <p class="image-caption">Our tree close-up, without zoom</p>
+                        <img src="images/grad_mag.png" alt="Gradient Magnitude">
+                        <p class="image-caption">Combined Gradient Magnitude</p>
                     </div>
                     <div class="image-card">
-                        <img src="images/with_zoom_urban.jpeg" alt="Section 2 Image 2">
-                        <p class="image-caption">Our tree from a distance, with zoom</p>
+                        <img src="images/hsv_orientation.png" alt="Gradient Orientation HSV">
+                        <p class="image-caption">Gradient Orientation (HSV Space)</p>
                     </div>
                 </div>
             </div>
+
+            <!-- SECTION 3: DERIVATIVE OF GAUSSIAN (DOG) FILTER -->
             <div class="section-block">
-                <h2 class="section-title">Section 3: Dolly Zoom</h2>
-                <p class="section-desc">For dolly zoom demonstration, I placed a vase and took several photos of it each time moving away and zooming in on it.</p>
+                <h2 class="section-title">Section 3: Derivative of Gaussian (DoG) Filter</h2>
+                <p class="section-desc">Enhancing edges reliably requires smoothing the image first to remove high-frequency noise before applying difference operators[cite: 1].</p>
+                <p style="text-align: left; margin-bottom: 1rem;">We compared two approaches: a <strong>two-step approach</strong> (blurring the image first, then applying $dx$/$dy$) versus a <strong>single-step DoG approach</strong> (convolving the original image directly with pre-computed DoG filters). While both produce nearly identical results, the single-step method eliminates intermediate calculations, saving computational overhead on larger images like the Nutmeg cat image (300 KB)[cite: 1].</p>
+            </div>
+
+            <!-- SECTION 4: IMAGE SHARPENING (UNSHARP MASK) -->
+            <div class="section-block">
+                <h2 class="section-title">Section 4: Image Sharpening via Unsharp Masking</h2>
+                <p class="section-desc">Because Gaussian filters retain only low frequencies, subtracting the blurred image from the original isolates high frequencies, which can then be added back to produce a sharper image[cite: 1].</p>
                 
-                <div class="video-container">
-                    <video controls autoplay loop muted playsinline preload="metadata">
-                        <source src="images/dolly_zoom.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                    <p class="dolly_zoom.mp4">Dolly zoom GIF</p>
+                <div class="image-grid">
+                    <div class="image-card">
+                        <img src="images/original_image.png" alt="Original Image">
+                        <p class="image-caption">Original Image</p>
+                    </div>
+                    <div class="image-card">
+                        <img src="images/sharpened_image.png" alt="Sharpened Image">
+                        <p class="image-caption">Sharpened Image (Unsharp Mask)</p>
+                    </div>
                 </div>
+                <p style="text-align: left; margin-top: 1rem; font-size: 0.95rem; color: #64748b;"><em>Note: Minor color fringes and artifacts can appear when processing RGB color channels independently through the filter[cite: 1].</em></p>
             </div>
 
         </div>
     </main>
-</body>
 </html>
