@@ -21,14 +21,17 @@
     <main>
         <div class="card">
             <h1 style="text-align: center;">SYDE 671 Assignment 2 Review</h1>
-            <p>In this blog, we review key concepts from Assignment 2, starting with the fundamentals of convolution, exploring various implementation methods, examining edge detection and Derivative of Gaussian (DoG) filters, and concluding with image sharpening techniques[cite: 1].</p>
+            <p>In this blog we will be reviewing the concepts from assignment 2. Starting off at the basics, we will first review the concept of convolution and look at a few different methods to implement a convolution. 
+We then look at combining two different transitioning images based on your viewing distance from the image. Lastly, we will discuss image blending and the oraple theory.
+</p>
             
             <!-- SECTION 1: INTRODUCTION TO CONVOLUTION -->
             <div class="section-block">
                 <h2 class="section-title">Section 1: Convolution & Implementation Methods</h2>
-                <p class="section-desc">Convolution scans every pixel in an image using a kernel (filter) to process pixels in the context of their neighbors, extracting useful features or transforming features to be more meaningful[cite: 1].</p>
+                <p class="section-desc">Let’s begin by first discussing what a convolution is and look at different ways to implement and how each method effects the processing time and results.
+Convolution is a way to scan every pixel in an image and extract useful information from it or transform its features to make them more meaningful. Convolution uses a kernel or a filter to process pixels in the context of its neighboring pixels. </p>
                 
-                <p style="text-align: left; margin-bottom: 1rem;"><strong>1. Four For-Loops Implementation:</strong> The most fundamental way to implement convolution is using array functions and four nested for-loops. While computationally expensive and slow for large images, it clearly demonstrates the underlying math and how edge padding prevents border feature loss[cite: 1].</p>
+                <p style="text-align: left; margin-bottom: 1rem;"><strong>1. Four For-Loops Implementation:</strong> The most fundamental way to implement a convolution is by using array functions and for loops. This method helps new users to understand how convolution works. Having this understanding is crucial to further perform useful image processing operations using filters and convolution.</p>
                 
                 <div class="image-grid">
                     <div class="image-card">
