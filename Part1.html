@@ -32,7 +32,61 @@ We then look at combining two different transitioning images based on your viewi
 Convolution is a way to scan every pixel in an image and extract useful information from it or transform its features to make them more meaningful. Convolution uses a kernel or a filter to process pixels in the context of its neighboring pixels. </p>
                 
                 <p style="text-align: left; margin-bottom: 1rem;"><strong>1. Four For-Loops Implementation:</strong> The most fundamental way to implement a convolution is by using array functions and for loops. This method helps new users to understand how convolution works. Having this understanding is crucial to further perform useful image processing operations using filters and convolution.</p>
-                
+                <div class="code-block-container">
+                    <pre><code>
+                        #part 1.1: Convolution with 4 for loops
+import numpy as np
+import matplotlib.pyplot as plt
+import cv2
+
+img = cv2.imread(r"C:\Users\Muhammad Muneeb\Desktop\Documents\Masters\SYDE 671\Assignment 2\Me.jpeg")
+img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+kernel = np.ones((9, 9), dtype=np.float32) / 81.0
+
+def convolve_with_4forloops(img, kernel):
+    kernel_h, kernel_w = kernel.shape
+    img_h, img_w = img.shape
+
+    pad_h = kernel_h // 2
+    pad_w = kernel_w // 2
+
+    padded_img = np.pad(img, ((pad_h, pad_h), (pad_w, pad_w)), mode = 'constant', constant_values = 0)
+
+    flip_kernel = np.flip(np.flip(kernel, axis = 0), axis = 1)
+
+    output = np.zeros_like(img, dtype=np.float32)
+
+    for i in range(img_h):
+        for j in range(img_w):
+            pixel_sum = 0.0
+
+            for k in range(kernel_h):
+                for l in range(kernel_w):
+                    img_val = padded_img[i + k, j + l]
+                    kernel_val = flip_kernel[k, l]
+                    pixel_sum += img_val * kernel_val
+
+            output[i, j] = pixel_sum
+            
+    return output
+
+result = convolve_with_4forloops(img, kernel)
+plt.figure(figsize=(10,5))
+
+plt.subplot(1, 2, 1)
+plt.title('Original Greyscale')
+plt.imshow(img, cmap = 'gray')
+plt.axis('off')
+
+plt.subplot(1, 2, 2)
+plt.title('Filtered (Blurred)')
+plt.imshow(result, cmap='gray')
+plt.axis('off')
+
+plt.show
+                    </code></pre>
+                </div>
                 <div class="image-grid">
                     <div class="image-card">
                         <img src="images/original_greyscale.png" alt="Original Greyscale">
