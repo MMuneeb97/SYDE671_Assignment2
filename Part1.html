@@ -21,9 +21,10 @@
     <main>
         <div class="card">
             <h1 style="text-align: center;">SYDE 671 Assignment 2 Review</h1>
-            <p>In this blog we will be reviewing the concepts from assignment 2. Starting off at the basics, we will first review the concept of convolution and look at a few different methods to implement a convolution. 
-We then look at combining two different transitioning images based on your viewing distance from the image. Lastly, we will discuss image blending and the oraple theory.
-</p>
+            <p>As expected, the processed image has lost its sharpness, especially around the edges and any thin fine features such the rim of the glasses, the letters on the shirt and hair. Overall, the details and features of the original image are still discernable in the processed image.
+                While manual nested loops are great for learning the underlying math, optimized libraries use vectorized operations and Fourier transforms to run much faster on large images.
+                Next, we will slightly optimize the code to use less processing time and process larger images more efficiently. While using four for loops was an effective way to explain the underlying principle it increases the number of calculations and slows down the processing especially when dealing with larger images or more involved filters. The following code uses only two for loops instead of four to achieve the same effect as before.
+            </p>
             
             <!-- SECTION 1: INTRODUCTION TO CONVOLUTION -->
             <div class="section-block">
@@ -90,15 +91,76 @@ Convolution is a way to scan every pixel in an image and extract useful informat
                 <p class="section-desc">After loading in the required libraries, NumPy to use array functions and matplotlib to plot our images we load in the image and convert it from color to grayscale. Once the image is loaded, we define our kernel; a 9x9 matrix of ones. This is a box filter that will reduce the sharpness and make it smooth. Simply put it makes the image blurred. Next we define our convolution function, we start by padding the image all around with zeros to make sure that the edge features don’t get deleted during the convolution operations as the kernel moves across the image.
                 Next, we define our four nested for loops. The outer loops iterate over the image size (height and width) and the inner loops iterate over the kernel size and perform the dot product over a size of the image equal to the kernel size across the entire image. The results of the convolution are stored in an array and returned at the function call.
                 Below are the results of the convolution performed with the above code.   
- </p>
+                </p>
                 
                 <div class="image-grid">
                     <div class="image-card">
                         <img src="blog _pics\img1.png" alt="img1">
                     </div>
                 </div>
+                <p class="section-desc">As expected, the processed image has lost its sharpness, especially around the edges and any thin fine features such the rim of the glasses, the letters on the shirt and hair. Overall, the details and features of the original image are still discernable in the processed image.
+                While manual nested loops are great for learning the underlying math, optimized libraries use vectorized operations and Fourier transforms to run much faster on large images.
+                Next, we will slightly optimize the code to use less processing time and process larger images more efficiently. While using four for loops was an effective way to explain the underlying principle it increases the number of calculations and slows down the processing especially when dealing with larger images or more involved filters. The following code uses only two for loops instead of four to achieve the same effect as before.
+                </p>    
 
-                <p style="text-align: left; margin-top: 1.5rem; margin-bottom: 1rem;"><strong>2. Optimized Two For-Loops & SciPy:</strong> By extracting a region of interest (ROI) matching the kernel size, we reduce the implementation to two for-loops, significantly speeding up processing time[cite: 1]. Streamlining further with SciPy's built-in <code>convolve2d</code> utilizes optimized vectorized operations and Fourier transforms for maximum efficiency on large images[cite: 1].</p>
+                <p style="text-align: left; margin-top: 1.5rem; margin-bottom: 1rem;"><strong>2. Two For-Loops Implementation</strong> By extracting a region of interest (ROI) matching the kernel size, we reduce the implementation to two for-loops, significantly speeding up processing time[cite: 1]. Streamlining further with SciPy's built-in <code>convolve2d</code> utilizes optimized vectorized operations and Fourier transforms for maximum efficiency on large images[cite: 1].</p>
+                <div class="code-block-container">
+                    <pre><code>
+                        #part 1.1: Convolution with 2 for loops
+                        import numpy as np
+                        import matplotlib.pyplot as plt
+                        import cv2
+                        
+                        img = cv2.imread(r"C:\Users\Muhammad Muneeb\Desktop\Documents\Masters\SYDE 671\Assignment 2\Me.jpeg")
+                        img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+                        
+                        kernel = np.ones((9, 9), dtype=np.float32) / 81.0
+                        
+                        def convolve_with_2forloops(img, kernel):
+                            kernel_h, kernel_w = kernel.shape
+                            img_h, img_w = img.shape
+                        
+                            pad_h = kernel_h // 2
+                            pad_w = kernel_w // 2
+                        
+                            padded_img = np.pad(img, ((pad_h, pad_h), (pad_w, pad_w)), mode = 'constant', constant_values = 0)
+                        
+                            flip_kernel = np.flip(np.flip(kernel, axis = 0), axis = 1)
+                        
+                            output = np.zeros_like(img, dtype=np.float32)
+                        
+                            for i in range(img_h):
+                                for j in range(img_w):
+                                    roi = padded_img[i : i + kernel_h, j : j + kernel_w]
+                                    output[i, j] = np.sum(roi * flip_kernel)
+                                    
+                            return output
+                        
+                        result = convolve_with_2forloops(img, kernel)
+                        plt.figure(figsize=(10,5))
+                        
+                        plt.subplot(1, 2, 1)
+                        plt.title('Original Greyscale')
+                        plt.imshow(img, cmap = 'gray')
+                        plt.axis('off')
+                        
+                        plt.subplot(1, 2, 2)
+                        plt.title('Filtered (Blurred)')
+                        plt.imshow(result, cmap='gray')
+                        plt.axis('off')
+                        
+                        plt.show()
+                    </code></pre>
+                </div>
+                <p class="section-desc">This time we use two for loops instead of four. Instead of iterating over the entire image, this time around we pick a region of interest matching the size of our kernel, perform the convolution calculation and then slide our region of interest one column to the right and repeat for the entire image. Below is the result of this code and you can see the results are identical however the processing time is significantly reduced and larger images can be processed more effeciently with this code.   
+                </p>
+                
+                <div class="image-grid">
+                    <div class="image-card">
+                        <img src="blog _pics\img4.png" alt="img4">
+                    </div>
+                </div>
+                
             </div>
 
             <!-- SECTION 2: EDGE DETECTION WITH DIFFERENCE OPERATORS -->
