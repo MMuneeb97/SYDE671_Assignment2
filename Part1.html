@@ -242,12 +242,12 @@ Convolution is a way to scan every pixel in an image and extract useful informat
                         plt.show()
                     </code></pre>
                 </div>
-                <p class="section-desc">The results of the above code are shown below.</p> 
-                <div class="image-grid">
-                    <div class="image-card">
-                        <img src="blog _pics\img8.png" alt="img8">
-                    </div>
+             <p class="section-desc">The results of the above code are shown below.</p> 
+             <div class="image-grid">
+                <div class="image-card">
+                    <img src="blog _pics\img8.png" alt="img8">
                 </div>
+             </div>
             </div>
             <p class="section-desc">We will now take a deeper dive into difference operators and see the individual gradients in the x and y directions along with the magnitude. 
                 The gradient is calculated by convolving the image with an x and y difference operator respectively and calculating the sum of the square roots of the gradients in dx and dy.
@@ -315,33 +315,8 @@ Convolution is a way to scan every pixel in an image and extract useful informat
                     <div class="image-card">
                         <img src="blog _pics\img9.png" alt="img9">
                     </div>
-                </div>
+            </div>
         </div>
-            <!-- SECTION 3: DERIVATIVE OF GAUSSIAN (DOG) FILTER -->
-            <div class="section-block">
-                <h2 class="section-title">Section 3: Derivative of Gaussian (DoG) Filter</h2>
-                <p class="section-desc">Enhancing edges reliably requires smoothing the image first to remove high-frequency noise before applying difference operators[cite: 1].</p>
-                <p style="text-align: left; margin-bottom: 1rem;">We compared two approaches: a <strong>two-step approach</strong> (blurring the image first, then applying $dx$/$dy$) versus a <strong>single-step DoG approach</strong> (convolving the original image directly with pre-computed DoG filters). While both produce nearly identical results, the single-step method eliminates intermediate calculations, saving computational overhead on larger images like the Nutmeg cat image (300 KB)[cite: 1].</p>
-            </div>
-
-            <!-- SECTION 4: IMAGE SHARPENING (UNSHARP MASK) -->
-            <div class="section-block">
-                <h2 class="section-title">Section 4: Image Sharpening via Unsharp Masking</h2>
-                <p class="section-desc">Because Gaussian filters retain only low frequencies, subtracting the blurred image from the original isolates high frequencies, which can then be added back to produce a sharper image[cite: 1].</p>
-                
-                <div class="image-grid">
-                    <div class="image-card">
-                        <img src="images/original_image.png" alt="Original Image">
-                        <p class="image-caption">Original Image</p>
-                    </div>
-                    <div class="image-card">
-                        <img src="images/sharpened_image.png" alt="Sharpened Image">
-                        <p class="image-caption">Sharpened Image (Unsharp Mask)</p>
-                    </div>
-                </div>
-                <p style="text-align: left; margin-top: 1rem; font-size: 0.95rem; color: #64748b;"><em>Note: Minor color fringes and artifacts can appear when processing RGB color channels independently through the filter[cite: 1].</em></p>
-            </div>
-
         </div>
     </main>
 </html>
