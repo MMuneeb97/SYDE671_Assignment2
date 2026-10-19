@@ -32,7 +32,7 @@
                 <p class="section-desc">Let’s begin by first discussing what a convolution is and look at different ways to implement and how each method effects the processing time and results.
 Convolution is a way to scan every pixel in an image and extract useful information from it or transform its features to make them more meaningful. Convolution uses a kernel or a filter to process pixels in the context of its neighboring pixels. </p>
                 
-                <p style="text-align: left; margin-bottom: 1rem;"><strong>1. Four For-Loops Implementation:</strong> The most fundamental way to implement a convolution is by using array functions and for loops. This method helps new users to understand how convolution works. Having this understanding is crucial to further perform useful image processing operations using filters and convolution.</p>
+                <p style="text-align: left; margin-bottom: 1rem;">The most fundamental way to implement a convolution is by using array functions and for loops. This method helps new users to understand how convolution works. Having this understanding is crucial to further perform useful image processing operations using filters and convolution.</p>
                 <div class="code-block-container">
                     <pre><code>
                         #part 1.1: Convolution with 4 for loops
@@ -151,7 +151,7 @@ Convolution is a way to scan every pixel in an image and extract useful informat
                         plt.show()
                     </code></pre>
                 </div>
-                <p class="section-desc">This time we use two for loops instead of four. Instead of iterating over the entire image, 
+                <p class="section-desc">This time we used two for loops instead of four. Instead of iterating over the entire image, 
                     this time around we pick a region of interest matching the size of our kernel, perform the convolution calculation and 
                     then slide our region of interest one column to the right and repeat for the entire image. Below is the result of this code and 
                     you can see the results are identical however the processing time is significantly reduced and larger images can be processed more effeciently with this code.   
@@ -164,44 +164,159 @@ Convolution is a way to scan every pixel in an image and extract useful informat
                 </div>
                 
             </div>
-            <p class="section-desc"> </p>    
-
+            <p class="section-desc">ext, we take things up a notch and streamline the code even further. We will use the built in convolution function from the SciPy python library this time as it is optimized to perform large calculations very efficiently. </p>    
                 <div class="code-block-container">
                     <pre><code>
-                                           </code></pre>
-                </div>
-                <p class="section-desc">   
-                </p>
-                
+                        #part 1.1: Convolution with scipy
+                        import numpy as np
+                        import matplotlib.pyplot as plt
+                        import cv2
+                        from scipy.signal import convolve2d
+                        
+                        img = cv2.imread(r"C:\Users\Muhammad Muneeb\Desktop\Documents\Masters\SYDE 671\Assignment 2\Me.jpeg")
+                        img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+                        
+                        kernel = np.ones((9, 9), dtype=np.float32) / 81.0
+                        
+                        result = convolve2d(img, kernel)
+                        
+                        result = convolve_with_2forloops(img, kernel)
+                        plt.figure(figsize=(10,5))
+                        
+                        plt.subplot(1, 2, 1)
+                        plt.title('Original Greyscale')
+                        plt.imshow(img, cmap = 'gray')
+                        plt.axis('off')
+                        
+                        plt.subplot(1, 2, 2)
+                        plt.title('Filtered (Blurred)')
+                        plt.imshow(result, cmap='gray')
+                        plt.axis('off')
+                        
+                        plt.show()
+                    </code></pre>
+                </div>               
                 <div class="image-grid">
                     <div class="image-card">
-                        <img src="blog _pics\img4.png" alt="img4">
+                        <img src="blog _pics\img6.png" alt="img6">
                     </div>
                 </div>
-                
+                <p class="section-desc">To conclude this section on convolution I think it’s fair to say that while manual nested loops are great for learning the underlying math, optimized libraries use vectorized operations and Fourier transforms to run much faster on large images   
+                </p>
             </div>
 
 
             <!-- SECTION 2: EDGE DETECTION WITH DIFFERENCE OPERATORS -->
             <div class="section-block">
                 <h2 class="section-title">Section 2: Edge Detection Using Difference Operators</h2>
-                <p class="section-desc">Difference operators ($dx$ and $dy$) are uni-directional vectors used to extract gradient magnitudes horizontally and vertically[cite: 1].</p>
-                <p style="text-align: left; margin-bottom: 1rem;">The partial derivative $dy$ highlights vertical edges by subtracting the pixel above from the pixel below, while $dx$ captures horizontal edges[cite: 1]. The combined gradient magnitude is calculated as $\text{grad\_mag} = \sqrt{\text{grad\_x}^2 + \text{grad\_y}^2}$[cite: 1].</p>
-                
-                <p style="text-align: left; margin-bottom: 1rem;"><strong>Threshold Sweeps:</strong> To suppress background noise (such as grass or minor textures), binarization loops apply intensity cutoffs. Pixels above the threshold are set to 255, while those below are set to 0. Finding the optimal threshold requires balancing feature clarity against background loss[cite: 1].</p>
-                
+                <p class="section-desc">Now we will look at another useful way to process images and extract useful information. We are going to look at how to detect the edges of an image using the difference operators. Difference operators are uni-directional vectors that are used to extract magnitudes in the y and x directions. The dy operator works by subtracting the pixel above from the pixel below, this highlights the vertical edges as the operator moves across the image rows from top to bottom. The dx operator works in the same way but in the horizontal direction, capturing the magnitudes of the edges across the image from left to right.</p>
+                <p style="text-align: left; margin-bottom: 1rem;">The code below uses the built-in convolve function and dx and dy difference operators to capture the edges of an input image. The convolution function takes care of the padding and also makes sure that output image is the same size as the original image.</p>
+                <div class="code-block-container">
+                    <pre><code>
+                        #part 1.1: Convolution with scipy
+                        import numpy as np
+                        import matplotlib.pyplot as plt
+                        import cv2
+                        from scipy.signal import convolve2d
+                        
+                        img = cv2.imread(r"C:\Users\Muhammad Muneeb\Desktop\Documents\Masters\SYDE 671\Assignment 2\Me.jpeg")
+                        img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+                        
+                        kernel = np.ones((9, 9), dtype=np.float32) / 81.0
+                        
+                        result = convolve2d(img, kernel)
+                        
+                        result = convolve_with_2forloops(img, kernel)
+                        plt.figure(figsize=(10,5))
+                        
+                        plt.subplot(1, 2, 1)
+                        plt.title('Original Greyscale')
+                        plt.imshow(img, cmap = 'gray')
+                        plt.axis('off')
+                        
+                        plt.subplot(1, 2, 2)
+                        plt.title('Filtered (Blurred)')
+                        plt.imshow(result, cmap='gray')
+                        plt.axis('off')
+                        
+                        plt.show()
+                    </code></pre>
+                </div>
+                <p class="section-desc">The results of the above code are shown below.</p> 
                 <div class="image-grid">
                     <div class="image-card">
-                        <img src="images/grad_mag.png" alt="Gradient Magnitude">
-                        <p class="image-caption">Combined Gradient Magnitude</p>
-                    </div>
-                    <div class="image-card">
-                        <img src="images/hsv_orientation.png" alt="Gradient Orientation HSV">
-                        <p class="image-caption">Gradient Orientation (HSV Space)</p>
+                        <img src="img8.png" alt="img8">
                     </div>
                 </div>
             </div>
-
+            <p class="section-desc">We will now take a deeper dive into difference operators and see the individual gradients in the x and y directions along with the magnitude. 
+                The gradient is calculated by convolving the image with an x and y difference operator respectively and calculating the sum of the square roots of the gradients in dx and dy.
+                The following code is used to calculate the gradients.
+            </p>
+        <div class="code-block-container">
+                    <pre><code>
+                        #1.2 Finite diference operator
+                        import numpy as np
+                        import matplotlib.pyplot as plt
+                        import cv2
+                        from scipy.signal import convolve2d
+                        
+                        img = cv2.imread(r'C:\Users\Muhammad Muneeb\Desktop\Documents\Masters\SYDE 671\Assignment 2\hybrid\cameraman.jpeg')
+                        img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+                        
+                        dx = [[1, 0, -1]]
+                        dy = [[1],
+                              [0],
+                              [-1]
+                             ]
+                        
+                        grad_x = convolve2d(img, dx, mode='same', boundary='fill', fillvalue=0)
+                        grad_y = convolve2d(img, dy, mode='same', boundary='fill', fillvalue=0)
+                        grad_mag = np.sqrt(grad_x**2 + grad_y**2)
+                        
+                        plt.figure(figsize = (5, 5))
+                        plt.subplot(2, 2, 1)
+                        plt.title('Original Greyscale')
+                        plt.imshow(img)
+                        plt.axis('off')
+                        
+                        plt.subplot(2, 2, 2)
+                        plt.title('Partial derivative dx')
+                        plt.imshow(grad_x)
+                        plt.axis('off')
+                        
+                        plt.subplot(2, 2, 3)
+                        plt.title('Partial derivative dy')
+                        plt.imshow(grad_y)
+                        plt.axis('off')
+                        
+                        plt.subplot(2, 2, 4)
+                        plt.title('magnitude of dx and dy')
+                        plt.imshow(grad_mag)
+                        plt.axis('off')
+                        
+                        
+                        threshold = [20, 30, 40, 50, 60, 70, 80, 90]
+                        
+                        plt.figure(figsize= (16, 8))
+                        for i, j in enumerate (threshold, start=1):
+                            binarized_grad_mag = (grad_mag >= j) * 255
+                        
+                            plt.subplot(2, 4, i)
+                            plt.title(f'Threshold: {j}')
+                            plt.imshow(binarized_grad_mag)
+                            plt.axis('off')
+                        
+                        plt.show() 
+                    </code></pre>
+            <p class="section-desc">The image below shows the breakdown of the original greyscale into partial derivatives dx and dy capturing the vertical facing and horizontal facing edges 
+                respectively along with the combined gradient capturing the entire image. </p>
+            <div class="image-grid">
+                    <div class="image-card">
+                        <img src="img9.png" alt="img9">
+                    </div>
+                </div>
+        </div>
             <!-- SECTION 3: DERIVATIVE OF GAUSSIAN (DOG) FILTER -->
             <div class="section-block">
                 <h2 class="section-title">Section 3: Derivative of Gaussian (DoG) Filter</h2>
