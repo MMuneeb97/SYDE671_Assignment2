@@ -32,7 +32,7 @@
                 <p class="section-desc">Let’s begin by first discussing what a convolution is and look at different ways to implement and how each method effects the processing time and results.
 Convolution is a way to scan every pixel in an image and extract useful information from it or transform its features to make them more meaningful. Convolution uses a kernel or a filter to process pixels in the context of its neighboring pixels. </p>
                 
-                <p style="text-align: left; margin-bottom: 1rem;">The most fundamental way to implement a convolution is by using array functions and for loops. This method helps new users to understand how convolution works. Having this understanding is crucial to further perform useful image processing operations using filters and convolution.</p>
+                <p class="section-desc">The most fundamental way to implement a convolution is by using array functions and for loops. This method helps new users to understand how convolution works. Having this understanding is crucial to further perform useful image processing operations using filters and convolution.</p>
                 <div class="code-block-container">
                     <pre><code>
                         #part 1.1: Convolution with 4 for loops
@@ -320,7 +320,7 @@ Convolution is a way to scan every pixel in an image and extract useful informat
             <p class = "section-desc"> We have first calculated the gradient magnitudes using convolved function as explained in the previous steps Then we reduce the noise in the image by implementing a binarization loop and pre-defining a list threshold values. The threshold values are intensity cutoffs for the pixels; a pixel that are greater than or equal to the threshold value are converted to a value of 255 and any pixels below the threshold value is turned to 0. This reduces the noise by emphasizing the prominent edge features and turns the background noise features dark. Below is the sweep of the image for different threshold values.</p>
             <div class="image-grid">
                     <div class="image-card">
-                        <img src="blog _pics\img10.png" alt="img10">
+                        <img src="blog _pics\img11.png" alt="img11">
                     </div>
             </div>
         <p class="section-desc">As you can see that with lower threshold values, we get a lot of background noise from grass and other surrounding features but as we increase the threshold, the edges of the cameraman become crisper and more prominent but as we keep increasing the threshold beyond 60, we start to see the cameraman starts to turn darker and blend in with the surrounding. It is an iterative process to find the right threshold that focus on the important features, too low of a threshold and you’re looking for a needle in a haystack and too high of a threshold and you blend in with the surroundings.</p>
@@ -463,6 +463,138 @@ Convolution is a way to scan every pixel in an image and extract useful informat
 We then calculate the DoG filters for x and y by convolving our 2D kernel with 1d vector kernels for x and y respectively. 
 Now for comparison’s sake, we perform two different approaches here. The first approach, the two-step approach involves blurring the image first and then convolving it with the 1D difference operators dx and dy. The second, the single step approach involves convolving the original image without blurring to the 2D kernel directly. This eliminates the intermediate calculation for the blurred image and makes the program more efficient. Let’s take a look at the results.
 </p>
+        <div class="image-grid">
+                    <div class="image-card">
+                        <img src="blog _pics\img14.png" alt="img14">
+                    </div>
+        </div>
+        <div class="image-grid">
+                    <div class="image-card">
+                        <img src="blog _pics\img15.png" alt="img15">
+                    </div>
+        </div>
+        <p class="section-desc">Before we even apply binarization and reduce the image noise with threshold, you can see the gradient magnitude obtained with the DoG filter is very similar to the one obtained with two-step method where we blurred the image first. Even though the result from the two-step method and the single step method are identical, the single-step method is computationally less intensive and can process larger images quicker and more efficiently.
+Next let’s look at how the images compare when we apply the same threshold to binarize the results.
+</p>
+        <div class="image-grid">
+                    <div class="image-card">
+                        <img src="blog _pics\img16.png" alt="img16">
+                    </div>
+        </div>
+        <div class="image-grid">
+                    <div class="image-card">
+                        <img src="blog _pics\img17.png" alt="img17">
+                    </div>
+        </div>
+        <p class="section-desc">The results look very similar with the two methods on this image if not identical. There are subtle differences that can be made out. The background noise due to grass and the surroundings is slightly less with the two-step method (smoothed gradient magnitude). If you focus between the tripod and cameraman’s legs, you can see the noise is smaller at threshold 30. Overall, it is hard to differentiate between the results with this image. Let’s look at another image.</p>
+        <div class="image-grid">
+                    <div class="image-card">
+                        <img src="blog _pics\img18.png" alt="img18">
+                    </div>
+        </div>
+        <div class="image-grid">
+                    <div class="image-card">
+                        <img src="blog _pics\img19.png" alt="img19">
+                    </div>
+        </div>
+        <p class="section-desc">Again, we get almost identical results for the Taj mahal image as well. Both methods are effective in capturing the edges. Both these images were almost the same size (30kb). Lets look at a larger image next.</p>
+        <div class="image-grid">
+                    <div class="image-card">
+                        <img src="blog _pics\img20.png" alt="img20">
+                    </div>
+        </div>
+        <div class="image-grid">
+                    <div class="image-card">
+                        <img src="blog _pics\img21.png" alt="img21">
+                    </div>
+        </div>
+        <p class="section-desc">The nutmeg image took longer to process with the two-step method than the single-step method due its size (300kb) and also since there is a lot more pixels involved in this one, whiskers and fur that are thin fine details. 
+Lastly, we apply the HSV filter to color the edges and make the stronger, more prominent features standout and darken the low intensity edges. The HSV is a way to display the direction and magnitude of the image in one colored image.
+</p>
+        <div class="image-grid">
+                    <div class="image-card">
+                        <img src="blog _pics\img22.png" alt="img22">
+                    </div>
+        </div>
+
+        <!-- SECTION 3: Image Sharpening -->
+            <div class="section-block">
+                <h2 class="section-title">Section 3: Image Sharpening and Unmasking Filter</h2>
+                <p class="section-desc">So far, we have discussed convolution and how to use it to smoothen/blur images. Next, we will look at how to unblur these images using the unsharp mask filter. Since the Gaussian filter we have been using so far retains only the low frequencies from the original image, if we subtract the blurred image from the original, we are left with a sharper image with more high frequencies. The code below does exactly this, it takes an input image blurs it and then resharpens it using this technique.</p>
+                <div class="code-block-container">
+                    <pre><code>
+                        #2.1 Image Sharpening
+                        import numpy as np
+                        import matplotlib.pyplot as plt
+                        import cv2
+                        from scipy.signal import convolve2d
+                        
+                        img = cv2.imread(r"C:\Users\Muhammad Muneeb\Desktop\Documents\Masters\SYDE 671\Assignment 2\hybrid\cameraman.jpeg")
+                        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+                        
+                        orig_img = img
+                        
+                        sigma = 1.0
+                        amount = 0.1
+                        ksize = 5
+                        
+                        gaussian_1D = cv2.getGaussianKernel(ksize = ksize, sigma = sigma)
+                        G = np.outer(gaussian_1d, gaussian_1d.T)
+                        
+                        delta = np.zeros((ksize, ksize))
+                        delta[ksize // 2, ksize // 2] = 1.0
+                        
+                        H_usm = (1.0 + amount) * delta - amount * G
+                        
+                        sharpened = np.zeros_like(img)
+                        
+                        for i in range(3):
+                            sharpened[..., i] = cv2.filter2D(
+                                img[..., i].astype(np.float32), -1, H_usm
+                            )
+                        sharpened = np.clip(sharpened, 0, 255).astype(np.uint8)
+                        
+                        plt.figure(figsize=(10, 5))
+                        plt.subplot(1, 2, 1)
+                        plt.title('Original Image')
+                        plt.imshow(orig_img)
+                        plt.axis('off')
+                        
+                        plt.subplot(1, 2, 2)
+                        plt.title('Sharpened Image')
+                        plt.imshow(sharpened)
+                        plt.axis('off')
+                        
+                        plt.show()
+                    </code></pre>
+                </div>
+                <p class="section-desc">we are using the same kernel as before to blur the image we then create a mask using the H_USM formula by assigning a weight to how much of the frequencies to add back to the original image. Then we iterate through the three color channels, R,G,B, and plot the original and sharpened images.   
+                </p>
+                
+                <div class="image-grid">
+                    <div class="image-card">
+                        <img src="blog _pics\img23.png" alt="img23">
+                    </div>
+                </div>
+                <p class="section-desc">We see some color fringes and artifacts in the processed image. These are mainly caused due to the processing of the color channels separately, if we have time left we will go over how to fix these later in the blog. Here are some more images processed using the same code</p>    
+                <div class="image-grid">
+                    <div class="image-card">
+                        <img src="blog _pics\img24.png" alt="img24">
+                    </div>
+                </div>
+                <div class="image-grid">
+                    <div class="image-card">
+                        <img src="blog _pics\img25.png" alt="img25">
+                    </div>
+                </div>
+
+                 <!-- SECTION 1: INTRODUCTION TO CONVOLUTION -->
+            <div class="section-block">
+                <h2 class="section-title">Section 1: Convolution & Implementation Methods</h2>
+                <p class="section-desc">In this next section we will discuss some more advanced image processing techniques. We will learn how to combine different images into one and create a hybrid image that shows different features based on your viewing distance from the image. The second technique we will look at is image blending where we will look at how to combine images and show the transition going from left to right and blend in the overlapping pixels of the image.</p>
+        
+
+        
     </div>
         </div>
     </main>
