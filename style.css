@@ -142,7 +142,7 @@ p {
 }
 
 /* ==========================================================================
-   5. SECTIONS & SIDE-BY-SIDE IMAGE GRID (UPDATED)
+   5. SECTIONS & SIDE-BY-SIDE IMAGE GRID (UPDATED FOR LARGER IMAGES)
    ========================================================================== */
 .section-block {
     margin-bottom: 2.5rem;
@@ -167,32 +167,32 @@ p {
     text-align: left;
 }
 
-/* Horizontal flexbox container for images */
+/* Expanded container width to allow larger side-by-side display */
 .image-grid {
     display: flex;
-    flex-direction: row;       /* Forces side-by-side alignment */
-    justify-content: center;   /* Centers the image pair horizontally */
-    align-items: flex-start;   /* Aligns top borders cleanly */
-    gap: 1.5rem;               /* Space between left and right image cards */
-    max-width: 1000px;          /* Restricts total grid width so images stay controlled */
-    margin: 1.5rem auto;       /* Centers the container within the card */
+    flex-direction: row;       
+    justify-content: center;   
+    align-items: flex-start;   
+    gap: 2rem;               
+    max-width: 1000px;         /* Increased width */
+    margin: 2rem auto;       
 }
 
-/* Individual card wrapper for each image */
+/* Expanded individual card wrapper */
 .image-card {
-    flex: 1;                   /* Gives each image equal 50% width allocation */
-    max-width: 350px;          /* Prevents individual images from expanding too large */
+    flex: 1;                   
+    max-width: 480px;          /* Increased from 350px to make single/grid images wider */
     text-align: center;
 }
 
-/* Responsive image sizing controls */
+/* Expanded image sizing controls */
 .image-card img {
-    width: 100%;               /* Fills the image-card container width */
-    max-height: 500px;         /* Caps vertical growth to prevent tall images taking over */
-    object-fit: contain;       /* Preserves exact image aspect ratio without cropping borders */
+    width: 100%;               
+    max-height: 700px;         /* Increased max-height significantly so tall plots/sweeps display bigger */
+    object-fit: contain;       
     border-radius: 6px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    background-color: #f8fafc; /* Subtle background for transparent/cropped images */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+    background-color: #f8fafc; 
 }
 
 .image-caption {
@@ -201,7 +201,6 @@ p {
     margin-top: 0.5rem;
     text-align: center;
 }
-
 /* ==========================================================================
    6. FOOTER & RESPONSIVE BREAKPOINTS
    ========================================================================== */
