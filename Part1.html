@@ -97,7 +97,6 @@ Convolution is a way to scan every pixel in an image and extract useful informat
                     </div>
                 </div>
                 <p class="section-desc">As expected, the processed image has lost its sharpness, especially around the edges and any thin fine features such the rim of the glasses, the letters on the shirt and hair. Overall, the details and features of the original image are still discernable in the processed image.
-                While manual nested loops are great for learning the underlying math, optimized libraries use vectorized operations and Fourier transforms to run much faster on large images.
                 Next, we will slightly optimize the code to use less processing time and process larger images more efficiently. While using four for loops was an effective way to explain the underlying principle it increases the number of calculations and slows down the processing especially when dealing with larger images or more involved filters. The following code uses only two for loops instead of four to achieve the same effect as before.
                 </p>    
 
@@ -160,8 +159,7 @@ Convolution is a way to scan every pixel in an image and extract useful informat
                         <img src="blog _pics\img4.png" alt="img4">
                     </div>
                 </div>
-                
-            </div>
+             </div>
             <p class="section-desc">Next, we take things up a notch and streamline the code even further. We will use the built in convolution function from the SciPy python library this time as it is optimized to perform large calculations very efficiently. </p>    
                 <div class="code-block-container">
                     <pre><code>
@@ -315,14 +313,14 @@ Convolution is a way to scan every pixel in an image and extract useful informat
                         <img src="blog _pics\img9.png" alt="img9">
                     </div>
             </div>
-            <p class = "section-desc"> We have first calculated the gradient magnitudes using convolved function as explained in the previous steps Then we reduce the noise in the image by implementing a binarization loop and pre-defining a list threshold values. The threshold values are intensity cutoffs for the pixels; a pixel that are greater than or equal to the threshold value are converted to a value of 255 and any pixels below the threshold value is turned to 0. This reduces the noise by emphasizing the prominent edge features and turns the background noise features dark. Below is the sweep of the image for different threshold values.</p>
+            <p class = "section-desc"> We have first calculated the gradient magnitudes using convolved function as explained in the previous steps Then we reduce the noise in the image by implementing a binarization loop and pre-defining a list of threshold values. The threshold values are intensity cutoffs for the pixels; any pixels that are greater than or equal to the threshold value are converted to a value of 255 and any pixels below the threshold value are turned to 0. This reduces the noise by emphasizing the prominent edge features and turns the background noise features dark. Below is the sweep of the image for different threshold values.</p>
             <div class="image-grid">
                     <div class="image-card">
                         <img src="blog _pics\img11.png" alt="img11">
                     </div>
             </div>
         <p class="section-desc">As you can see that with lower threshold values, we get a lot of background noise from grass and other surrounding features but as we increase the threshold, the edges of the cameraman become crisper and more prominent but as we keep increasing the threshold beyond 60, we start to see the cameraman starts to turn darker and blend in with the surrounding. It is an iterative process to find the right threshold that focus on the important features, too low of a threshold and you’re looking for a needle in a haystack and too high of a threshold and you blend in with the surroundings.</p>
-        <p class="section-desc">The previous section outlined a general approach to edge detection. In this section we will take a deeper dive and take a look into how to enhance the edges from the same edges using a different filter. The below code is used to first smoothen the original image and then convolve it using the DOG (derivative of gaussian) filter to detect the edges. We will discuss the results of this section with the previous section shortly.</p>
+        <p class="section-desc">The previous section outlined a general approach to edge detection. In this section we will take a deeper dive and take a look into how to enhance the edges from the same image using a different filter. The below code is used to first smoothen the original image and then convolve it using the DOG (derivative of gaussian) filter to detect the edges. We will compare the results of this section with the previous section.</p>
             <div class="code-block-container">
                     <pre><code>#1.3 Derivative of Gaussian (DoG) Filter
                     #1.3 Derivative of Gaussian (DoG) Filter
@@ -507,8 +505,9 @@ Next let’s look at how the images compare when we apply the same threshold to 
                     </div>
         </div>
         <p class="section-desc">The nutmeg image took longer to process with the two-step method than the single-step method due its size (300kb) and also since there is a lot more pixels involved in this one, whiskers and fur that are thin fine details. 
-Lastly, we apply the HSV filter to color the edges and make the stronger, more prominent features standout and darken the low intensity edges. The HSV is a way to display the direction and magnitude of the image in one colored image.
-</p>
+        </p>
+     <p class = "section-desc">Lastly, we apply the HSV filter to color the edges and make them stronger, more prominent features standout and darken the low intensity edges. The HSV is a way to display the direction and magnitude of the image in one colored image.
+     </p>
         <div class="image-grid">
                     <div class="image-card">
                         <img src="blog _pics\img22.PNG" alt="img22">
@@ -575,7 +574,7 @@ Lastly, we apply the HSV filter to color the edges and make the stronger, more p
                         <img src="blog _pics\img24.png" alt="img24">
                     </div>
                 </div>
-                <p class="section-desc">We see some color fringes and artifacts in the processed image. These are mainly caused due to the processing of the color channels separately, if we have time left we will go over how to fix these later in the blog. Here are some more images processed using the same code</p>    
+                <p class="section-desc">We see some color fringes and artifacts in the processed image. These are mainly caused due to the processing of the color channels separately, if we have time left we will go over how to fix these later in the blog. Here are some more images processed using the same code.</p>    
                 <div class="image-grid">
                     <div class="image-card">
                         <img src="blog _pics\img25.png" alt="img25">
