@@ -580,19 +580,109 @@ Next let’s look at how the images compare when we apply the same threshold to 
                         <img src="blog _pics\img25.png" alt="img25">
                     </div>
                 </div>
-                <div class="image-grid">
-                    <div class="image-card">
-                        <img src="blog _pics\img26.png" alt="img26">
-                    </div>
-                </div>
+                
             </div> 
     </div>
              <div class="card">
                  <!-- SECTION 4: Image blending -->
             <div class="section-block">
                 <h2 class="section-title">Section 4: Image Blending</h2>
-                <p class="section-desc">In this next section we will discuss some more advanced image processing techniques. We will learn how to combine different images into one and create a hybrid image that shows different features based on your viewing distance from the image. The second technique we will look at is image blending where we will look at how to combine images and show the transition going from left to right and blend in the overlapping pixels of the image.</p>
-        
+                <p class="section-desc">In this next section we will discuss more advanced image processing techniques. We will look at how to create optical illusians by combining a pair of images.
+                By combining the low frequencies of one image to high frequencies of another we can create a visual effect that changes the image featres based on your viewing distance from the image.
+                Since viewing from a distance reduces the visibility of sharp, high frequncy features the low frequency image dominate and when viewing the image from close up, you see more detail i.e the
+                high frequency image.</p>
+            </div>
+                <p class="section-desc">In principal it sounds like a simple concept, simply take two images, blur the first one using a low pass gaussian filter to obtain the low frequencies from it and for
+                    second image subtract its smoothed version from the original to obtain its high frequencies, add the two together and done. In practice however, it takes some trial and error to perfectly align 
+                and scale the two together. Any misalignment and you won't get the desired effect you're looking for.</p>
+                <p class="section-desc">The code below is my first attempt at recreating the Derek-Nutmeg hybrid.</p>    
+         <div class="code-block-container">
+                    <pre><code>
+                        #2.2 Hybrid Images
+                        import numpy as np
+                        import matplotlib.pyplot as plt
+                        import cv2
+                        
+                        img1 = cv2.imread(
+                            r'C:\Users\Muhammad Muneeb\Desktop\Documents\Masters\SYDE 671\Assignment'
+                            r' 2\hybrid\DerekPicture.jpg'
+                        )
+                        img2 = cv2.imread(
+                            r'C:\Users\Muhammad Muneeb\Desktop\Documents\Masters\SYDE 671\Assignment'
+                            r' 2\hybrid\nutmeg.jpg'
+                        )
+                        
+                        img1 = cv2.cvtColor(img1, cv2.COLOR_BGR2RGB)
+                        img2 = cv2.cvtColor(img2, cv2.COLOR_BGR2RGB)
+                        
+                        sigma_low = 7
+                        sigma_high = 5
+                        
+                        angle_degrees = 35
+                        scale_factor = 1.2
+                        tx, ty = 70, 0
+                        
+                        h, w = img1.shape[:2]
+                        
+                        h_img2, w_img2 = img2.shape[:2]
+                        img2_cropped = img2[
+                            int(h_img2 * 0.1) : int(h_img2 * 0.7), int(w_img2 * 0.2) : int(w_img2 * 0.8)
+                        ]
+                        hc, wc = img2_cropped.shape[:2]
+                        
+                        center = (wc // 2, hc // 2)
+                        M = cv2.getRotationMatrix2D(center, angle_degrees, scale_factor)
+                        
+                        dst_x = (w / 2) + tx
+                        dst_y = (h / 2) + ty
+                        M[0, 2] = dst_x - (M[0, 0] * center[0] + M[0, 1] * center[1])
+                        M[1, 2] = dst_y - (M[1, 0] * center[0] + M[1, 1] * center[1])
+                        
+                        img2_aligned = cv2.warpAffine(
+                            img2_cropped, M, (w, h), borderValue=(255, 255, 255)
+                        )
+                        
+                        low_freq = cv2.GaussianBlur(
+                            img1.astype(np.float32), (0, 0), sigmaX=sigma_low, sigmaY=sigma_low
+                        )
+                        blur_img2 = cv2.GaussianBlur(
+                            img2_aligned.astype(np.float32), (0, 0), sigmaX=sigma_high, sigmaY=sigma_high
+                        )
+                        
+                        high_freq = img2_aligned.astype(np.float32) - blur_img2
+                        
+                        hybrid_img = low_freq + high_freq
+                        hybrid_img = np.clip(hybrid_img, 0, 255).astype(np.uint8)
+                        
+                        plt.figure(figsize=(15, 5))
+                        
+                        plt.subplot(1, 3, 1)
+                        plt.title('Image 1 (Low Pass Source)')
+                        plt.imshow(img1)
+                        plt.axis('off')
+                        
+                        plt.subplot(1, 3, 2)
+                        plt.title('Image 2 (High Pass Source)')
+                        plt.imshow(img2_aligned)
+                        plt.axis('off')
+                        
+                        plt.subplot(1, 3, 3)
+                        plt.title('Resulting Hybrid Image')
+                        plt.imshow(hybrid_img)
+                        plt.axis('off')
+                        
+                        plt.tight_layout()
+                        plt.show()
+                    </code></pre>
+                </div>
+                    <p class="section-desc">After reading in the images and obtaining the low and high frequencies, I resize the images so that both images are the same size. In this particular example
+                    since the nutmeg has the cat's face rotated I rotated the image counter clockwise to straighten the cat's face and tried cropping it to obtain straight edges but I could not get it to be square 
+                    image after the crop. The image ends p being a weeird diamond shape and does not align at all with Derek's face as shown below.</p>
+                 <div class="image-grid">
+                    <div class="image-card">
+                        <img src="blog _pics\img27.png" alt="img27">
+                    </div>
+                </div>
             </div>
      </div> 
         </div>
