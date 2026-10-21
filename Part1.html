@@ -698,7 +698,29 @@ Next let’s look at how the images compare when we apply the same threshold to 
                     </div>
                 </div>
                  <p class="section-desc">I had a similar issue with this one. I can not get the scale to be right, if i align the eyes the nose and rest of the features don't align and horizontally the ears and hair 
-                 don't align well either.</p>
+                 don't align well either. The problem here is that I'm trying to manally align and scale the images and also I'm picking one reference point, eyes, to align to. For it to actually work and alignment
+                 to be perfect there needs to be more than one reference points and also the coordinate used to align the images have to be more accurate. The best way to do this is be first displaying the images
+                 then selecting multiple points on the displayed iaage and using the coordinates of the selected points as alignment coordinates. This is one of the limitations of using Jupyter notebook for user interactive
+                 program. Since I do not have access to a better IDE at the moment, I will focus on using the image from earlier, Derek and nutmeg hybrid which had decent alignment to demonstrate the frequency cut-off analysis.
+                 </p>
+                 <p class="section-desc">I recreated the hybrid first and this time lowered the sigma for low frequecy from 7 to 5 and increased the sigma for high frequency from 5 to 15. I'm using Derek as the low 
+                 frequency component and Nutmeg as the higher frequency component so by changing the sigmas I'm capturing of Derek and less of Nutmeg. So on viewing the image close up, you see more of Derek and as you move
+                 away from the image yo see Nutmeg more clearly take over Derek.</p>
+                 <div class="image-grid">
+                    <div class="image-card">
+                        <img src="blog _pics\img30.PNG" alt="img30">
+                    </div>
+                </div>
+                 <p class="section-desc">Next, I perform frequency domain analysis to illustrate the step-by-step filtering process applied to construct the hybrid image. 
+                     The initial two images display the log-magnitude 2D Fourier transforms of the aligned input source images before filtering. 
+                     The third image represents the low-frequency component isolated via a 2D Gaussian filter, which concentrates spectral energy tightly at the center axis while attenuating higher frequencies.
+                     Conversely, the fourth image shows the high-frequency component, which suppresses the central low-frequency region to retain sharp edges and fine details. 
+                     Finally, the last image shows the spectrum of the resulting hybrid image, combining both characteristics to demonstrate the coexistence of the low-frequency base and high-frequency details</p>
+                  <div class="image-grid">
+                    <div class="image-card">
+                        <img src="blog _pics\img31.PNG" alt="img31">
+                    </div>
+                </div>
             </div>
      </div> 
         </div>
